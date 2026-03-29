@@ -1,0 +1,41 @@
+.contact-section {
+  padding: 100px 10%;
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.contact-title {
+  font-size: 3rem;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.contact-desc {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  margin-bottom: 3rem;
+}
+
+.contact-glass {
+  padding: 3rem;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 500px;
+  margin-bottom: 6rem;
+}
+
+.footer {
+  width: 100%;
+  text-align: center;
+  padding: 2rem 0;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-top: auto;
+  border-top: 1px solid var(--glass-border);
+}
