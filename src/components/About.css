@@ -82,23 +82,6 @@
   transition: var(--transition-smooth);
 }
 
-.about-image:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(0, 240, 255, 0.2);
-}
-
-.image-overlay {
-  position: absolute;
-  top: 0; left: 0; width: 100%; height: 100%;
-  background: var(--accent-cyan);
-  opacity: 0.1;
-  border-radius: 16px;
-  transition: var(--transition-smooth);
-}
-
-.about-image:hover .image-overlay {
-  opacity: 0;
-}
 
 @media (max-width: 800px) {
   .about-content {

@@ -1,4 +1,5 @@
 import './About.css';
+import profilePic from '../../media/rahul copy copy.jpg';
 
 const About = () => {
   return (
@@ -7,36 +8,33 @@ const About = () => {
         <h2>About Me</h2>
         <div className="line"></div>
       </div>
-      
+
       <div className="about-content">
         <div className="about-text glass">
           <p>
-            Hello! I'm Rahul, a passionate software developer who enjoys creating
-            things that live on the internet. My interest in web development started
-            when I decided to try editing custom templates — turns out hacking
-            together HTML & CSS taught me a lot about the web!
+            Hello! I'm Rahul Pr, a Creative Visual Designer based in Mananthavady, India.
+            I hold a BA in Multimedia and am deeply passionate about transforming ideas into
+            impactful visual experiences.
           </p>
           <p>
-            Fast-forward to today, and I've had the privilege of building software
-            that makes a difference. My main focus these days is building
-            accessible, inclusive products and digital experiences.
+            My work spans across graphic design, UI/UX, motion graphics, packaging, photography,
+            and video editing. I've had the privilege of designing engaging creatives, modern
+            product catalogs, and elegant brand presentations for clients across various industries.
           </p>
-          <p>Here are a few technologies I've been working with recently:</p>
+          <p>Here are my core skills and areas of expertise:</p>
           <ul className="skills-list">
-            <li>JavaScript (ES6+)</li>
-            <li>React & Vite</li>
-            <li>TypeScript</li>
-            <li>Node.js</li>
-            <li>HTML5 & CSS3</li>
-            <li>Python</li>
+            <li>Social Media Design</li>
+            <li>Print & Packaging Design</li>
+            <li>UI/UX Design</li>
+            <li>Video Editing</li>
+            <li>Motion Graphics</li>
+            <li>Photography & Videography</li>
           </ul>
         </div>
-        
+
         <div className="about-image-container">
-          <div className="about-image glass">
-            {/* Visual placeholder for profile image */}
-            <div className="image-overlay"></div>
-            <span>R .</span>
+          <div className="about-image glass" style={{ overflow: 'hidden', padding: 0 }}>
+            <img src={profilePic} alt="Rahul Pr" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '16px' }} />
           </div>
         </div>
       </div>

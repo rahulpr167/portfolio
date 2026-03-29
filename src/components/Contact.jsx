@@ -5,19 +5,23 @@ const Contact = () => {
     <section id="contact" className="contact-section">
       <h2 className="contact-title">Get In Touch</h2>
       <p className="contact-desc">
-        Although I'm not currently looking for any new opportunities, my inbox is
-        always open. Whether you have a question or just want to say hi, I'll try
-        my best to get back to you!
+        I am always open to discussing new projects, creative ideas, or opportunities to be part of your vision. Feel free to reach out!
       </p>
       
       <div className="contact-glass glass">
-        <a href="mailto:hello@rahul.com" className="btn-primary" style={{ display: 'inline-block', marginTop: '20px' }}>
+        <div style={{ marginBottom: '20px' }}>
+          <p><strong>Email:</strong> rahulpr167@gmail.com</p>
+          <p><strong>Phone:</strong> +91 9605224904</p>
+          <p><strong>Location:</strong> Mananthavady, India</p>
+          <p><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/rahul-pr-" target="_blank" rel="noreferrer" style={{color: 'var(--accent)'}}>linkedin.com/in/rahul-pr-</a></p>
+        </div>
+        <a href="mailto:rahulpr167@gmail.com" className="btn-primary" style={{ display: 'inline-block' }}>
           Say Hello
         </a>
       </div>
       
       <footer className="footer">
-        <p>Built by Rahul with React & Vite.</p>
+        <p>Built by Rahul Pr. Creative Visual Designer.</p>
       </footer>
     </section>
   );

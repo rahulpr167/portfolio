@@ -1,0 +1,69 @@
+.key-skills-section {
+  padding: 40px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.key-skills-heading {
+  font-family: var(--font-main);
+  font-size: 2rem;
+  color: #fff;
+  margin-bottom: 25px;
+  text-align: center;
+  font-weight: 700;
+}
+
+.key-skills-box {
+  width: 100%;
+  max-width: 800px;
+  background-color: rgba(20, 20, 20, 0.4); /* darker box for contrast similar to image */
+  border-radius: 20px;
+  padding: 50px 40px;
+  border: 1px solid rgba(255, 255, 255, 0.05); /* very faint border */
+}
+
+/* We override the default .glass effect to match the solid dark box of the image better */
+.key-skills-box.glass {
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.key-skills-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px 40px;
+  margin: 0;
+  padding: 0;
+}
+
+.key-skill-item {
+  color: var(--text-primary);
+  font-size: 1.2rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.bullet-point {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--accent-cyan);
+  box-shadow: 0 0 10px var(--accent-cyan);
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .key-skills-list {
+    grid-template-columns: 1fr;
+  }
+  .key-skills-box {
+    padding: 30px 20px;
+  }
+}

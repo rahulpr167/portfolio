@@ -90,3 +90,34 @@
   font-weight: 500;
   letter-spacing: 0.5px;
 }
+
+/* Clickable project card enhancements */
+.project-card--clickable {
+  cursor: pointer;
+}
+.project-card--clickable:hover {
+  box-shadow: 0 16px 48px rgba(0, 240, 255, 0.1);
+}
+
+.view-gallery-icon svg {
+  width: 22px;
+  height: 22px;
+  stroke: var(--text-secondary);
+  transition: var(--transition-smooth);
+}
+.project-card--clickable:hover .view-gallery-icon svg {
+  stroke: var(--accent-cyan);
+}
+
+.view-gallery-label {
+  display: inline-block;
+  margin-top: 16px;
+  color: var(--accent-cyan);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  transition: letter-spacing 0.2s;
+}
+.project-card--clickable:hover .view-gallery-label {
+  letter-spacing: 1.5px;
+}

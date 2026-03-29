@@ -5,11 +5,12 @@ const Hero = () => {
     <section id="home" className="hero-section">
       <div className="hero-content">
         <h4 className="greeting">Hi, I'm</h4>
-        <h1 className="name">Rahul</h1>
-        <h2 className="role">I build things for the web.</h2>
+        <h1 className="name">Rahul Pr</h1>
+        <h2 className="role">Creative Visual Designer.</h2>
         <p className="description">
-          I'm a software engineer specializing in building exceptional digital experiences.
-          Currently, I'm focused on building accessible, human-centered products.
+          BA in Multimedia specializing in graphic design, UI/UX, motion graphics,
+          packaging, photography, and video editing. Passionate about transforming
+          ideas into impactful visual experiences.
         </p>
         <div className="hero-cta">
           <a href="#projects" className="btn-outline">Check out my work!</a>
