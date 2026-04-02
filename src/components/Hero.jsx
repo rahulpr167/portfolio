@@ -13,8 +13,13 @@ const Hero = () => {
           ideas into impactful visual experiences.
         </p>
         <div className="hero-cta">
-          <a href="#projects" className="btn-outline">Check out my work!</a>
-        </div>
+            <button
+              className="btn-outline"
+              onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
+            >
+              Check out my work!
+            </button>
+          </div>
       </div>
       
       {/* Decorative background elements */}

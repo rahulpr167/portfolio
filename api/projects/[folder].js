@@ -1,4 +1,5 @@
 import { v2 as cloudinary } from 'cloudinary';
+import { CATEGORIES } from '../../src/mediaManifest.js';
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -17,8 +18,12 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Missing folder parameter' });
   }
 
-  // Cloudinary folder path: portfolio/images/<slug>
-  const prefix = `portfolio/images/${folder}`;
+  // Map slug (e.g. "social-media-creatives") → folder name (e.g. "Social Media Creatives")
+  const category = CATEGORIES.find(c => c.slug === folder);
+  const folderName = category ? category.folder : folder;
+
+  // Cloudinary folder path: portfolio/images/<folder name>
+  const prefix = `portfolio/images/${folderName}`;
 
   try {
     // Fetch images

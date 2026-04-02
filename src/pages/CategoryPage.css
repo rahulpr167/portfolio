@@ -6,7 +6,7 @@
   overflow-x: hidden;
 }
 
-/* Loading spinner */
+/* Loading spinner (kept for backwards compat) */
 .cat-spinner {
   width: 44px;
   height: 44px;
@@ -16,6 +16,23 @@
   animation: spin 0.8s linear infinite;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Skeleton loading cards ─────────────────────────────────────────────── */
+/* Replaces the spinner: renders 12 pulsing placeholder cards in the grid    */
+.skeleton-card {
+  background: #1a1a1a;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  cursor: default;
+  opacity: 1;          /* override the default media-card opacity: 0 */
+  transform: none;     /* override the default translateY */
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%   { opacity: 0.5; }
+  50%  { opacity: 1;   }
+  100% { opacity: 0.5; }
+}
 
 /* Header */
 .cat-header {

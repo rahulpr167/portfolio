@@ -1,72 +1,80 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { CATEGORIES } from '../mediaManifest';
 import LightboxModal from '../components/LightboxModal';
 import './CategoryPage.css';
 
+// ── Skeleton placeholder count shown while loading ────────────────────────────
+const SKELETON_COUNT = 12;
+
 const CategoryPage = () => {
   const { categorySlug } = useParams();
   const navigate = useNavigate();
 
-  const category = CATEGORIES.find(c => c.slug === categorySlug);
+  const category = CATEGORIES.find((c) => c.slug === categorySlug);
 
-  const [media, setMedia]     = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError]     = useState(null);
+  const [media,         setMedia]         = useState([]);
+  const [loading,       setLoading]       = useState(true);
+  const [error,         setError]         = useState(null);
+  const [lightboxIndex, setLightboxIndex] = useState(null);
+  const [loaded,        setLoaded]        = useState({});
 
-  // ── Fetch media from Vercel API → Cloudinary ─────────────────────────────
-  useEffect(() => {
+  // ── Fetch media from /api/projects/{slug} ─────────────────────────────────
+  const fetchMedia = useCallback(() => {
     if (!category) return;
 
     setLoading(true);
     setError(null);
     setMedia([]);
+    setLoaded({});
 
     fetch(`/api/projects/${categorySlug}`)
-      .then(res => {
+      .then((res) => {
         if (!res.ok) throw new Error(`Server responded ${res.status}`);
         return res.json();
       })
-      .then(data => {
-        const mapped = (data.resources || []).map(r => ({
-          id:      r.id,
-          url:     r.url,
-          isVideo: r.type === 'video',
-          filename: r.id.split('/').pop(),       // last segment of public_id
+      .then((data) => {
+        // API now returns a flat array directly (not { resources: [...] })
+        const flat = Array.isArray(data) ? data : [];
+        const mapped = flat.map((r) => ({
+          id:       r.public_id,
+          url:      r.url,
+          isVideo:  r.type === 'video',
+          filename: r.public_id?.split('/').pop() ?? '',
         }));
         setMedia(mapped);
       })
-      .catch(err => {
+      .catch((err) => {
         console.error('Media fetch error:', err);
         setError(err.message);
       })
       .finally(() => setLoading(false));
   }, [categorySlug, category]);
-  // ─────────────────────────────────────────────────────────────────────────
 
-  const [lightboxIndex, setLightboxIndex] = useState(null);
-  const [loaded, setLoaded]               = useState({});
-
+  useEffect(() => { fetchMedia(); }, [fetchMedia]);
   useEffect(() => { window.scrollTo(0, 0); }, [categorySlug]);
 
-  const openLightbox = (index) => setLightboxIndex(index);
-  const closeLightbox = () => setLightboxIndex(null);
-  const prevItem = () => setLightboxIndex(i => (i - 1 + media.length) % media.length);
-  const nextItem = () => setLightboxIndex(i => (i + 1) % media.length);
-  const markLoaded = (i) => setLoaded(prev => ({ ...prev, [i]: true }));
+  // ── Lightbox helpers ──────────────────────────────────────────────────────
+  const openLightbox  = (i) => setLightboxIndex(i);
+  const closeLightbox = ()  => setLightboxIndex(null);
+  const prevItem      = ()  => setLightboxIndex((i) => (i - 1 + media.length) % media.length);
+  const nextItem      = ()  => setLightboxIndex((i) => (i + 1) % media.length);
+  const markLoaded    = (i) => setLoaded((prev) => ({ ...prev, [i]: true }));
 
+  // ── Category not found ───────────────────────────────────────────────────
   if (!category) {
     return (
       <div className="cat-error">
-        <h2>Category not found.</h2>
-        <button onClick={() => navigate('/')} className="btn-back">← Back to Portfolio</button>
+        <div className="cat-empty-icon">🔍</div>
+        <h2>Category not found</h2>
+        <button className="btn-back" onClick={() => navigate('/')}>← Back to Portfolio</button>
       </div>
     );
   }
 
   return (
     <div className="cat-page">
-      {/* Sticky header */}
+      {/* ── Sticky header ── */}
       <header className="cat-header glass">
         <button className="btn-back" onClick={() => navigate(-1)}>← Back</button>
         <h1 className="cat-title">{category.name}</h1>
@@ -77,40 +85,37 @@ const CategoryPage = () => {
 
       <div className="cat-glow-top" />
 
-      {/* Loading spinner */}
+      {/* ── Loading: skeleton cards ── */}
       {loading && (
-        <div className="cat-empty">
-          <div className="cat-spinner" />
-          <p style={{ color: 'var(--text-secondary)', marginTop: '16px' }}>Loading media…</p>
+        <div className="media-grid">
+          {Array.from({ length: SKELETON_COUNT }).map((_, i) => (
+            <div key={i} className="media-card skeleton-card" />
+          ))}
         </div>
       )}
 
-      {/* Error state */}
+      {/* ── Error state ── */}
       {!loading && error && (
         <div className="cat-empty">
           <div className="cat-empty-icon">⚠️</div>
           <h3>Could not load media</h3>
           <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>{error}</p>
-          <button
-            className="btn-back"
-            style={{ marginTop: '20px' }}
-            onClick={() => window.location.reload()}
-          >
+          <button className="btn-back" style={{ marginTop: '20px' }} onClick={fetchMedia}>
             Retry
           </button>
         </div>
       )}
 
-      {/* Empty state */}
+      {/* ── Empty state ── */}
       {!loading && !error && media.length === 0 && (
         <div className="cat-empty">
-          <div className="cat-empty-icon">📂</div>
+          <div className="cat-empty-icon">🎨</div>
           <h3>Coming Soon</h3>
-          <p>Upload files to <code>portfolio/images/{categorySlug}</code> on Cloudinary to see them here.</p>
+          <p>This gallery is being prepared. Check back soon!</p>
         </div>
       )}
 
-      {/* Media Grid */}
+      {/* ── Media grid ── */}
       {!loading && !error && media.length > 0 && (
         <div className="media-grid">
           {media.map((item, index) => (
@@ -150,7 +155,7 @@ const CategoryPage = () => {
         </div>
       )}
 
-      {/* Lightbox */}
+      {/* ── Lightbox ── */}
       {lightboxIndex !== null && (
         <LightboxModal
           media={media}
