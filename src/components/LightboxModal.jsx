@@ -1,12 +1,12 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useEffect, useCallback } from 'react';
 import './LightboxModal.css';
 
 const LightboxModal = ({ media, currentIndex, onClose, onPrev, onNext }) => {
   const item = media[currentIndex];
 
   const handleKey = useCallback((e) => {
-    if (e.key === 'Escape') onClose();
-    if (e.key === 'ArrowLeft') onPrev();
+    if (e.key === 'Escape')     onClose();
+    if (e.key === 'ArrowLeft')  onPrev();
     if (e.key === 'ArrowRight') onNext();
   }, [onClose, onPrev, onNext]);
 
@@ -21,6 +21,9 @@ const LightboxModal = ({ media, currentIndex, onClose, onPrev, onNext }) => {
 
   if (!item) return null;
 
+  const isPDF   = item.format === 'pdf';
+  const isVideo = item.isVideo;
+
   return (
     <div className="lightbox-backdrop" onClick={onClose}>
       <button className="lightbox-close" onClick={onClose} aria-label="Close">✕</button>
@@ -32,21 +35,51 @@ const LightboxModal = ({ media, currentIndex, onClose, onPrev, onNext }) => {
       >‹</button>
 
       <div className="lightbox-content" onClick={(e) => e.stopPropagation()}>
-        {item.isVideo ? (
+
+        {/* ── PDF viewer ── */}
+        {isPDF && (
+          <div className="lightbox-pdf-wrapper">
+            <iframe
+              src={item.url}
+              title={item.filename}
+              className="lightbox-pdf"
+              allow="fullscreen"
+            />
+            <a
+              href={item.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="lightbox-pdf-download"
+              download
+            >
+              ⬇ Download PDF
+            </a>
+          </div>
+        )}
+
+        {/* ── Video player ── */}
+        {!isPDF && isVideo && (
           <video
             src={item.url}
             controls
             autoPlay
             className="lightbox-media"
           />
-        ) : (
+        )}
+
+        {/* ── Image ── */}
+        {!isPDF && !isVideo && (
           <img
             src={item.url}
             alt={item.filename}
             className="lightbox-media"
           />
         )}
-        <p className="lightbox-caption">{item.filename} · {currentIndex + 1} / {media.length}</p>
+
+        <p className="lightbox-caption">
+          {isPDF && <span className="lightbox-badge">PDF</span>}
+          {item.filename} · {currentIndex + 1} / {media.length}
+        </p>
       </div>
 
       <button

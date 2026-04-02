@@ -34,12 +34,14 @@ const CategoryPage = () => {
         return res.json();
       })
       .then((data) => {
-        // API now returns a flat array directly (not { resources: [...] })
         const flat = Array.isArray(data) ? data : [];
         const mapped = flat.map((r) => ({
           id:       r.public_id,
-          url:      r.url,
+          url:      r.url,           // original URL (or PDF download URL)
+          preview:  r.preview,       // first-page image for PDFs, same as url for images
           isVideo:  r.type === 'video',
+          isPDF:    r.format === 'pdf',
+          format:   r.format,
           filename: r.public_id?.split('/').pop() ?? '',
         }));
         setMedia(mapped);
@@ -115,7 +117,6 @@ const CategoryPage = () => {
         </div>
       )}
 
-      {/* ── Media grid ── */}
       {!loading && !error && media.length > 0 && (
         <div className="media-grid">
           {media.map((item, index) => (
@@ -124,7 +125,8 @@ const CategoryPage = () => {
               className={`media-card ${loaded[index] ? 'media-card--loaded' : ''}`}
               onClick={() => openLightbox(index)}
             >
-              {item.isVideo ? (
+              {/* ── Video card ── */}
+              {item.isVideo && (
                 <div className="media-video-wrapper">
                   <video
                     src={item.url}
@@ -137,9 +139,27 @@ const CategoryPage = () => {
                     <span className="play-icon">▶</span>
                   </div>
                 </div>
-              ) : (
+              )}
+
+              {/* ── PDF card — show page-1 preview image + badge ── */}
+              {item.isPDF && (
+                <div className="media-pdf-wrapper">
+                  <img
+                    src={item.preview}
+                    alt={item.filename}
+                    loading="lazy"
+                    decoding="async"
+                    className="media-thumb"
+                    onLoad={() => markLoaded(index)}
+                  />
+                  <span className="media-pdf-badge">PDF</span>
+                </div>
+              )}
+
+              {/* ── Image card ── */}
+              {!item.isVideo && !item.isPDF && (
                 <img
-                  src={item.url}
+                  src={item.preview || item.url}
                   alt={item.filename}
                   loading="lazy"
                   decoding="async"
@@ -147,8 +167,11 @@ const CategoryPage = () => {
                   onLoad={() => markLoaded(index)}
                 />
               )}
+
               <div className="media-hover-overlay">
-                <span className="media-hover-icon">{item.isVideo ? '▶' : '⤢'}</span>
+                <span className="media-hover-icon">
+                  {item.isVideo ? '▶' : item.isPDF ? '📄' : '⤢'}
+                </span>
               </div>
             </div>
           ))}

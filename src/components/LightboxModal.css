@@ -95,3 +95,58 @@
   .lightbox-prev { left: 6px; }
   .lightbox-next { right: 6px; }
 }
+
+/* ── PDF viewer ──────────────────────────────────────────────────────────── */
+.lightbox-pdf-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: 88vw;
+  max-width: 960px;
+}
+
+.lightbox-pdf {
+  width: 100%;
+  height: 78vh;
+  border: none;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 25px 80px rgba(0,0,0,0.8);
+}
+
+.lightbox-pdf-download {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+  color: #fff;
+  padding: 0.55rem 1.4rem;
+  border-radius: 30px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: box-shadow 0.2s, transform 0.2s;
+  text-decoration: none;
+}
+.lightbox-pdf-download:hover {
+  box-shadow: 0 6px 20px rgba(0, 240, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+/* PDF badge in caption */
+.lightbox-badge {
+  background: var(--accent-purple);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 20px;
+  margin-right: 8px;
+  letter-spacing: 0.5px;
+  vertical-align: middle;
+}
+
+@media (max-width: 600px) {
+  .lightbox-pdf { height: 65vh; }
+}
+
