@@ -5,7 +5,8 @@
   padding: 1rem 2rem;
   z-index: 1000;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 }
 
 .navbar {
@@ -53,6 +54,10 @@
   font-weight: 600;
   font-size: 0.95rem;
   box-shadow: 0 4px 15px rgba(176, 38, 255, 0.3);
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-main);
+  transition: box-shadow 0.3s, transform 0.2s;
 }
 
 .btn-primary:hover {
@@ -60,8 +65,93 @@
   transform: translateY(-2px);
 }
 
+/* ── Hamburger button ────────────────────────────────────────────────────── */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  z-index: 1100;
+}
+
+.hamburger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--text-primary);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+  transform-origin: center;
+}
+
+/* Animate to X when open */
+.hamburger--open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.hamburger--open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.hamburger--open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* ── Mobile dropdown menu ────────────────────────────────────────────────── */
+.mobile-menu {
+  display: none;
+  width: calc(100% - 4rem);
+  max-width: 1200px;
+  margin-top: 0.5rem;
+  border-radius: 20px;
+  padding: 1.5rem 2rem;
+  background: rgba(10, 10, 10, 0.96);
+}
+
+.mobile-menu ul {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  margin-bottom: 1.5rem;
+}
+
+.mobile-menu a {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  transition: color 0.2s;
+}
+
+.mobile-menu a:hover {
+  color: var(--accent-cyan);
+}
+
+.mobile-cta {
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+  padding: 0.75rem 1.5rem;
+}
+
+/* ── Responsive ─────────────────────────────────────────────────────────── */
 @media (max-width: 768px) {
-  .nav-links, .btn-primary {
+  .navbar-wrapper {
+    padding: 0.75rem 1rem;
+  }
+
+  .navbar {
+    padding: 0.75rem 1.25rem;
+    border-radius: 30px;
+  }
+
+  /* Hide desktop links and CTA, show hamburger */
+  .nav-links,
+  .btn-primary:not(.mobile-cta) {
     display: none;
+  }
+
+  .hamburger {
+    display: flex;
+  }
+
+  .mobile-menu {
+    display: block;
+    width: calc(100% - 2rem);
   }
 }
