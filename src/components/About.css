@@ -82,9 +82,31 @@
   transition: var(--transition-smooth);
 }
 
-
 @media (max-width: 800px) {
+  .about-section {
+    padding: 80px 5%;
+    text-align: center;
+  }
+
   .about-content {
     grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .about-text {
+    padding: 1.5rem;
+  }
+
+  .section-title {
+    justify-content: center;
+  }
+
+  .section-title .line {
+    display: none;  /* hides decorative line on mobile for cleaner look */
+  }
+
+  .skills-list {
+    justify-content: center;
+    grid-template-columns: repeat(2, 1fr);
   }
 }
