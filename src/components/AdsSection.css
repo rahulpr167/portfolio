@@ -1,0 +1,414 @@
+/* ═══════════════════════════════════════════════════════════════════
+   PREMIUM IMAGE-FIRST SHOWCASE — FLIPKART-STYLE INFINITE SCROLL
+   Inspired by Apple · Linear · Framer · Vercel
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Section wrapper ──────────────────────────────────────────────── */
+.sc-section {
+  width: 100%;
+  margin: 0 auto 5rem auto;
+  padding: 0;
+  position: relative;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   CAROUSEL OUTER WRAP — positioning context for nav buttons + dots
+   ══════════════════════════════════════════════════════════════════ */
+.sc-carousel-wrap {
+  position: relative;
+  width: 100%;
+  /* bottom padding creates space for dot indicators */
+  padding-bottom: 52px;
+}
+
+/* ── Overflow clip — only clips the track, not the nav buttons ── */
+.sc-carousel-overflow {
+  overflow: hidden;
+  width: 100%;
+  /* top/bottom breathing room so hover shadows aren't clipped */
+  padding: 8px 0 12px 0;
+}
+
+/* ── Track: flat flex row driven by JS translateX ── */
+.sc-carousel-track {
+  display: flex;
+  gap: 24px;
+  will-change: transform;
+  /* transform set exclusively via JS — no CSS transition here */
+}
+
+/* ── Each item: fixed-width card slot ── */
+.sc-carousel-item {
+  flex: 0 0 420px;
+  width: 420px;
+}
+
+@media (max-width: 1100px) {
+  .sc-carousel-item {
+    flex: 0 0 360px;
+    width: 360px;
+  }
+  .sc-carousel-track { gap: 20px; }
+}
+
+@media (max-width: 700px) {
+  .sc-carousel-item {
+    flex: 0 0 calc(100vw - 48px);
+    width: calc(100vw - 48px);
+  }
+  .sc-carousel-track { gap: 16px; }
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   NAV BUTTONS — glassmorphism circles, vertically centred on card area
+   ══════════════════════════════════════════════════════════════════ */
+.sc-nav {
+  position: absolute;
+  /* Centre vertically within the card image+info area,
+     accounting for the bottom dot padding */
+  top: calc(50% - 26px);   /* 26px = half of dot area */
+  transform: translateY(-50%);
+  z-index: 10;
+
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(14, 14, 14, 0.78);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.72);
+  cursor: pointer;
+
+  transition:
+    background   0.22s ease,
+    border-color 0.22s ease,
+    box-shadow   0.22s ease,
+    color        0.22s ease,
+    transform    0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.sc-nav svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+  pointer-events: none;
+}
+
+.sc-nav--left  { left: 12px; }
+.sc-nav--right { right: 12px; }
+
+.sc-nav:hover {
+  background: rgba(0, 240, 255, 0.1);
+  border-color: rgba(0, 240, 255, 0.35);
+  color: var(--accent-cyan);
+  box-shadow:
+    0 0 22px rgba(0, 240, 255, 0.18),
+    0 4px 20px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(0, 240, 255, 0.12);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.sc-nav:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+.sc-nav:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.45);
+}
+
+@media (max-width: 640px) {
+  .sc-nav { width: 38px; height: 38px; }
+  .sc-nav svg { width: 14px; height: 14px; }
+  .sc-nav--left  { left: 6px; }
+  .sc-nav--right { right: 6px; }
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   DOT INDICATORS
+   ══════════════════════════════════════════════════════════════════ */
+.sc-dots-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  position: absolute;
+  bottom: 8px;
+  left: 0;
+  right: 0;
+}
+
+.sc-dot {
+  display: block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transition:
+    width      0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.35s ease,
+    border-radius 0.35s ease,
+    box-shadow 0.35s ease;
+  flex-shrink: 0;
+  cursor: default;
+}
+
+.sc-dot--on {
+  width: 22px;
+  border-radius: 3.5px;
+  background: var(--accent-cyan);
+  box-shadow:
+    0 0  8px rgba(0, 240, 255, 0.55),
+    0 0 20px rgba(0, 240, 255, 0.22);
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   CARD — pixel-identical to previous version
+   ══════════════════════════════════════════════════════════════════ */
+.sc-card {
+  opacity: 0;
+  transform: translateY(36px);
+  cursor: pointer;
+  outline: none;
+  border-radius: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 100%;           /* fills .sc-carousel-item */
+
+  background: transparent;
+  border: 1px solid #2A2A2A;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+
+  transition:
+    opacity      0.65s cubic-bezier(0.22, 1, 0.36, 1) var(--delay, 0s),
+    transform    0.65s cubic-bezier(0.22, 1, 0.36, 1) var(--delay, 0s),
+    border-color 0.38s ease,
+    box-shadow   0.38s ease;
+}
+
+.sc-card--on {
+  opacity: 1;
+  transform: none;
+}
+
+.sc-card:focus-visible {
+  box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.45);
+}
+
+.sc-card:hover {
+  transform: translateY(-6px) scale(1.03);
+  border-color: rgba(255, 255, 255, 0.18);
+  box-shadow:
+    0 8px 32px  rgba(0, 0, 0, 0.55),
+    0 20px 64px rgba(0, 0, 0, 0.45),
+    0 0    0 1px rgba(255, 255, 255, 0.07);
+  cursor: pointer;
+}
+
+.sc-card--on:hover {
+  transform: translateY(-6px) scale(1.03);
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   IMAGE WRAPPER — 1:1 square, object-fit: contain, no cropping
+   ══════════════════════════════════════════════════════════════════ */
+.sc-img-wrap {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: #0E0E0E;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.sc-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.sc-img-fallback {
+  width: 100%;
+  height: 100%;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   INFO PANEL — below the image
+   ══════════════════════════════════════════════════════════════════ */
+.sc-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 22px 18px 22px;
+  border-top: 1px solid #1E1E1E;
+  background: rgba(10, 10, 10, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.sc-info-title {
+  font-family: var(--font-main);
+  font-size: clamp(0.9rem, 1.1vw, 1.05rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: #e8e8e8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+}
+
+.sc-info-desc { display: none; }
+
+.sc-info-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 16px;
+  border-radius: 100px;
+  font-family: var(--font-main);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  color: rgba(255, 255, 255, 0.72);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  white-space: nowrap;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition:
+    background   0.28s ease,
+    border-color 0.28s ease,
+    color        0.28s ease,
+    box-shadow   0.28s ease;
+}
+
+.sc-info-cta svg {
+  width: 12px;
+  height: 12px;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.sc-card:hover .sc-info-cta {
+  background: rgba(0, 240, 255, 0.1);
+  border-color: rgba(0, 240, 255, 0.35);
+  color: var(--accent-cyan);
+  box-shadow: 0 0 14px rgba(0, 240, 255, 0.18);
+}
+
+.sc-card:hover .sc-info-cta svg {
+  transform: translate(2px, -2px);
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   SKELETON LOADER
+   ══════════════════════════════════════════════════════════════════ */
+.sc-skeleton-row {
+  display: flex;
+  gap: 24px;
+  overflow: hidden;
+  padding: 8px 60px;
+}
+
+.sc-skeleton-row .sc-card {
+  flex: 0 0 420px;
+  width: 420px;
+}
+
+.sc-skeleton {
+  border-color: rgba(255, 255, 255, 0.04);
+}
+
+.sc-skel-img {
+  aspect-ratio: 1 / 1;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.sc-skel-title {
+  height: 14px;
+  width: 50%;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.sc-skel-btn {
+  height: 30px;
+  width: 64px;
+  border-radius: 100px;
+  background: rgba(255, 255, 255, 0.05);
+  flex-shrink: 0;
+}
+
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.shimmer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.055) 50%,
+    transparent 100%
+  );
+  animation: sc-shimmer 2s ease infinite;
+}
+@keyframes sc-shimmer {
+  100% { transform: translateX(100%); }
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   ERROR STATE
+   ══════════════════════════════════════════════════════════════════ */
+.sc-error {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.1rem 1.6rem;
+  border-radius: 12px;
+  color: #ff6b6b;
+  font-size: 0.88rem;
+  background: rgba(255, 107, 107, 0.06);
+  border: 1px solid rgba(255, 107, 107, 0.2);
+  margin: 0 10%;
+}
+
+.sc-retry {
+  padding: 0.4rem 1rem;
+  border-radius: 6px;
+  border: 1px solid currentColor;
+  background: transparent;
+  color: inherit;
+  font-family: var(--font-main);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s;
+}
+
+.sc-retry:hover {
+  background: #ff6b6b;
+  color: #000;
+  border-color: #ff6b6b;
+}
