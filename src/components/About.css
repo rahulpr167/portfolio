@@ -116,6 +116,7 @@
     .about-image {
         width: 260px;
         margin: auto;
+        justify-self: center;
     }
 
     .skills-list {
@@ -154,6 +155,8 @@
 
     .about-image {
         width: 220px;
+        justify-self: center;
+        margin: auto;
     }
 
     .about-text p {
