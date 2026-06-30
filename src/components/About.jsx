@@ -1,5 +1,5 @@
-import './About.css';
-import profilePic from '../../media/rahulpr.jpeg';
+import "./About.css";
+import profilePic from "../../media/rahulpr.jpeg";
 
 const About = () => {
   return (
@@ -9,33 +9,34 @@ const About = () => {
         <div className="line"></div>
       </div>
 
-      <div className="about-content">
-        <div className="about-text glass">
-          <p>
-            Hello! I'm Rahul Pr, a Creative Visual Designer based in Mananthavady, India.
-            I hold a BA in Multimedia and am deeply passionate about transforming ideas into
-            impactful visual experiences.
-          </p>
-          <p>
-            My work spans across graphic design, UI/UX, motion graphics, packaging, photography,
-            and video editing. I've had the privilege of designing engaging creatives, modern
-            product catalogs, and elegant brand presentations for clients across various industries.
-          </p>
-          <p>Here are my core skills and areas of expertise:</p>
-          <ul className="skills-list">
-            <li>Social Media Design</li>
-            <li>Print & Packaging Design</li>
-            <li>UI/UX Design</li>
-            <li>Video Editing</li>
-            <li>Motion Graphics</li>
-            <li>Photography & Videography</li>
-          </ul>
+      <div className="about-card glass">
+        <div className="about-image">
+          <img src={profilePic} alt="Rahul Pr" className="profile-image" />
         </div>
 
-        <div className="about-image-container">
-          <div className="about-image glass" style={{ overflow: 'hidden', padding: 0 }}>
-            <img src={profilePic} alt="Rahul Pr" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '16px' }} />
-          </div>
+        <div className="about-text">
+          <p>
+            Hello! I'm <strong>Rahul Pr</strong>, a Creative Visual Designer
+            based in Mananthavady, India. I hold a BA in Multimedia and create
+            impactful visual experiences that combine creativity with strategy.
+          </p>
+
+          <p>
+            My expertise includes graphic design, UI/UX, branding, motion
+            graphics, packaging, photography and video editing. I help brands
+            communicate through clean, modern and meaningful visuals.
+          </p>
+
+          <h4>Core Skills</h4>
+
+          <ul className="skills-list">
+            <li>Social Media Design</li>
+            <li>Print & Packaging</li>
+            <li>UI/UX Design</li>
+            <li>Motion Graphics</li>
+            <li>Video Editing</li>
+            <li>Photography</li>
+          </ul>
         </div>
       </div>
     </section>
