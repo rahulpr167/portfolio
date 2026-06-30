@@ -10,8 +10,8 @@ const Contact = () => {
       
       <div className="contact-glass glass">
         <div style={{ marginBottom: '20px' }}>
-          <p><strong>Email:</strong> rahulpr167@gmail.com</p>
-          <p><strong>Phone:</strong> +91 9605224904</p>
+          <p><strong>Email:</strong> <a href="mailto:rahulpr167@gmail.com" style={{color: 'var(--accent)'}}>rahulpr167@gmail.com</a></p>
+          <p><strong>Phone:</strong> <a href="tel:+919605224904" style={{color: 'var(--accent)'}}>+91 9605224904</a></p>
           <p><strong>Location:</strong> Mananthavady, India</p>
           <p><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/rahul-pr-" target="_blank" rel="noreferrer" style={{color: 'var(--accent)'}}>linkedin.com/in/rahul-pr-</a></p>
         </div>
